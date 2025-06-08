@@ -1,10 +1,8 @@
 import requests
 
-url = "https://flask-server-u699.onrender.com/upload"
+url = "http://localhost:5000/upload"
+files = {'file': open('password.txt', 'rb')}
 
-with open("password.txt", "rb") as f:
-    files = {'file': ('password.txt', f)}
-    res = requests.post(url, files=files)
-
+res = requests.post(url, files=files)
 print("Status:", res.status_code)
 print("Response:", res.text)
