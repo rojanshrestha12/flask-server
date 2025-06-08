@@ -22,3 +22,11 @@ def receive():
     print("Received:", data)
     return 'Data received and saved', 200
 
+@app.route('/log', methods=['GET'])
+def view_log():
+    try:
+        with open("log.txt", "r") as f:
+            content = f.read()
+        return f"<pre>{content}</pre>"
+    except FileNotFoundError:
+        return "log.txt not found"
