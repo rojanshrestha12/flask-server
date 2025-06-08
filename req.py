@@ -1,6 +1,6 @@
 import requests
 
-url = "https://your-render-url.onrender.com/upload"
+url = "https://flask-server-u699.onrender.com/upload"
 
 with open("password.txt", "rb") as f:
     files = {'file': ('password.txt', f)}
