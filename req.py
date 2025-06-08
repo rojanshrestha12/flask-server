@@ -1,6 +1,6 @@
 import requests
 
-url = "https://your-render-url.onrender.com/receive"  # Replace with your actual Render URL
+url = "https://flask-server-u699.onrender.com/receive"  # Replace with your actual Render URL
 
 data = {
     "browser_password": "test_1234",

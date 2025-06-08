@@ -12,12 +12,13 @@ def receive():
 
     log_entry = f"{datetime.now()} | {data}\n"
 
-    # Save the data to a file
-    with open("log.txt", "a") as f:
-        f.write(log_entry)
+    try:
+        with open("log.txt", "a") as f:
+            f.write(log_entry)
+        print("✅ Data saved to log.txt")
+    except Exception as e:
+        print("❌ Failed to write log:", e)
 
     print("Received:", data)
     return 'Data received and saved', 200
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
